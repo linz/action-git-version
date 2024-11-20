@@ -66,7 +66,7 @@ runs:
             --dev-branch "${{ inputs.dev-branch }}" \
             --minor-identifier="${{ inputs.minor-identifier }}" \
             --major-identifier="${{ inputs.major-identifier }}" \
-            --version-prefix "${{ inputs.prefix }}") \
+            --version-prefix "${{ inputs.prefix }}" \
             --version-suffix "${{ inputs.suffix }}")
 
         echo "previous-version=$PREVIOUS_VERSION" >> $GITHUB_OUTPUT
@@ -82,7 +82,7 @@ runs:
             --minor-identifier="${{ inputs.minor-identifier }}" \
             --major-identifier="${{ inputs.major-identifier }}" \
             --log-paths="${{ inputs.log-paths }}" \
-            --version-prefix "${{ inputs.prefix }}") \
+            --version-prefix "${{ inputs.prefix }}" \
             --version-suffix "${{ inputs.suffix }}")
 
         echo "version=$VERSION" >> $GITHUB_OUTPUT
