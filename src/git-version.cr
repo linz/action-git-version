@@ -12,7 +12,8 @@ module GitVersion
 
   class Git
     def initialize(@dev_branch : String, @release_branch : String, @minor_identifier : String, @major_identifier : String,
-                   @folder = FileUtils.pwd, @prefix : String = "", @log_paths : String = "", @suffix : String = "")
+                   @folder = FileUtils.pwd, @prefix : String = "", @log_paths : String = "", @suffix : String = "",
+                   @skip_prerelease : Bool = false)
       @major_id_is_regex = false
       @minor_id_is_regex = false
       if match = /\/(.*)\//.match(@major_identifier)
@@ -197,31 +198,33 @@ module GitVersion
           )
       end
 
-      cb = current_branch_or_tag
+      if !@skip_prerelease
+        cb = current_branch_or_tag
 
-      if cb == @release_branch
-        #
-      elsif cb == @dev_branch
-        prerelease = [DEV_BRANCH_SUFFIX, commits_distance(previous_tag), current_commit_hash()] of String | Int32
-        previous_version =
-          SemanticVersion.new(
-            previous_version.major,
-            previous_version.minor,
-            previous_version.patch,
-            SemanticVersion::Prerelease.new(prerelease),
-            nil
-          )
-      else
-        branch_sanitized_name = cb.downcase.gsub(/[^a-zA-Z0-9]/, "")[0,30]
-        prerelease = [branch_sanitized_name, commits_distance(previous_tag), current_commit_hash()] of String | Int32
-        previous_version =
-          SemanticVersion.new(
-            previous_version.major,
-            previous_version.minor,
-            previous_version.patch,
-            SemanticVersion::Prerelease.new(prerelease),
-            nil
-          )
+        if cb == @release_branch
+          #
+        elsif cb == @dev_branch
+          prerelease = [DEV_BRANCH_SUFFIX, commits_distance(previous_tag), current_commit_hash()] of String | Int32
+          previous_version =
+            SemanticVersion.new(
+              previous_version.major,
+              previous_version.minor,
+              previous_version.patch,
+              SemanticVersion::Prerelease.new(prerelease),
+              nil
+            )
+        else
+          branch_sanitized_name = cb.downcase.gsub(/[^a-zA-Z0-9]/, "")[0,30]
+          prerelease = [branch_sanitized_name, commits_distance(previous_tag), current_commit_hash()] of String | Int32
+          previous_version =
+            SemanticVersion.new(
+              previous_version.major,
+              previous_version.minor,
+              previous_version.patch,
+              SemanticVersion::Prerelease.new(prerelease),
+              nil
+            )
+        end
       end
 
       return add_prefix_suffix(previous_version.to_s)
