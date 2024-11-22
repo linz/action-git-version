@@ -16,6 +16,23 @@
 > see https://toitutewhenua.atlassian.net/browse/ENABLE-4773
 >
 > This repo needs to exist until the above PRs get merged.
+>
+> To create new release in this fork, run the following scripts:
+>
+> 1. install build tool for Crystal language
+>    ```shell
+>    curl -fsSL https://crystal-lang.org/install.sh | sudo bash
+>    ```
+> 2. Test and build
+>    ```shell
+>    make docker_build
+>    docker run --entrypoint cat codacy/git-version:$(cat .version) /bin/git-version > bin/git-version
+>    ```
+> 3. Commit and push change to master branch
+> 4. Create release
+>    ```shell
+>    gh release create <version> bin/git-version --generate-notes --target <commit-sha>
+>    ```
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c811f6b557ee4e44ad373084015ba0b3)](https://www.codacy.com/gh/codacy/git-version?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=codacy/git-version&amp;utm_campaign=Badge_Grade)
 [![CircleCI](https://circleci.com/gh/codacy/git-version.svg?style=svg)](https://circleci.com/gh/codacy/git-version)
