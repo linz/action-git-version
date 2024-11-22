@@ -1,5 +1,22 @@
 # git-version
 
+> [!NOTE]
+> This repo is a fork of [codacy/git-version](https://github.com/codacy/git-version) with the following features and
+> fixes, all of which have pull-requests back to upstream:
+>
+> features:
+> 1. [support for custom version suffix](https://github.com/codacy/git-version/pull/96)
+> 2. [option to skip prerelease part of the version generated](https://github.com/codacy/git-version/pull/103)
+>
+> fixes:
+> 1. [export command cause error to be swallowed](https://github.com/codacy/git-version/pull/98)
+> 2. [avoid bumping version when there is no matching commit](https://github.com/codacy/git-version/pull/101)
+>
+> These feature and fixes are needed so we can replace the unverified action `paulhatch/semantic-version` 
+> see https://toitutewhenua.atlassian.net/browse/ENABLE-4773
+>
+> This repo needs to exist until the above PRs get merged.
+
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c811f6b557ee4e44ad373084015ba0b3)](https://www.codacy.com/gh/codacy/git-version?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=codacy/git-version&amp;utm_campaign=Badge_Grade)
 [![CircleCI](https://circleci.com/gh/codacy/git-version.svg?style=svg)](https://circleci.com/gh/codacy/git-version)
 [![](https://images.microbadger.com/badges/version/codacy/git-version.svg)](https://microbadger.com/images/codacy/git-version "Get your own version badge on microbadger.com")
