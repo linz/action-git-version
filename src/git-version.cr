@@ -14,6 +14,9 @@ module GitVersion
     def initialize(@dev_branch : String, @release_branch : String, @minor_identifier : String, @major_identifier : String,
                    @folder = FileUtils.pwd, @prefix : String = "", @log_paths : String = "", @suffix : String = "",
                    @skip_prerelease : Bool = false)
+      @major_identifier = @major_identifier.downcase
+      @minor_identifier = @minor_identifier.downcase
+
       @major_id_is_regex = false
       @minor_id_is_regex = false
       if match = /\/(.*)\//.match(@major_identifier)
