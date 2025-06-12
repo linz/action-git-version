@@ -204,6 +204,41 @@ describe GitVersion do
     end
   end
 
+  it "identifier can be specified in uppercase" do
+    tmp = InTmp.new
+
+    begin
+      git = GitVersion::Git.new("dev", "master", "feature:", "BREAKING CHANGE:", tmp.@tmpdir)
+
+      tmp.exec %(git init)
+      tmp.exec %(git checkout -b master)
+      tmp.exec %(git commit --no-gpg-sign --allow-empty -m "1")
+      tmp.exec %(git tag "1.0.0")
+
+      tmp.exec %(git checkout -b my-fancy.branch)
+      tmp.exec %(git commit --no-gpg-sign --allow-empty -m "2")
+
+      tmp.exec %(git commit --no-gpg-sign --allow-empty -m "feature: blah
+
+BREAKING CHANGE: XYZ")
+
+      tmp.exec %(git checkout master)
+
+      version = git.get_new_version
+
+      # no new commit in master, expect no version bump
+      version.should eq("1.0.0")
+
+      tmp.exec %(git merge my-fancy.branch)
+
+      version = git.get_new_version
+
+      version.should eq("2.0.0")
+    ensure
+      tmp.cleanup
+    end
+  end
+
   it "correct version on feature after second commit" do
     tmp = InTmp.new
 
@@ -953,7 +988,6 @@ it "get previous version - first commit" do
     tmp.exec %(git init)
     tmp.exec %(git checkout -b master)
     tmp.exec %(git commit --no-gpg-sign --allow-empty -m "1")
-
 
     # git-version should accept the breaking tag on commit with dir2
     version = git.get_previous_version
