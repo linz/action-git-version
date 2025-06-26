@@ -50,6 +50,8 @@ runs:
   using: "composite"
   steps:
     - shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
         set -eo pipefail
         TAG_OPT=""
@@ -58,6 +60,7 @@ runs:
         fi
         sudo gh release download $TAG_OPT --repo linz/action-git-version --pattern git-version --dir /usr/local/bin/ --clobber
         sudo chmod +x /usr/local/bin/git-version
+
     - id: previous-version
       shell: bash
       run: |
