@@ -53,12 +53,12 @@ runs:
       run: |
         set -eo pipefail
         if [ "${{ inputs.tool-version }}" = "latest" ]; then
-          download_url="$(curl -L https://api.github.com/repos/linz/action-git-version/releases/latest | jq -r .assets[0].browser_download_url)"
+          download_url="$(curl --retry 3 -L https://api.github.com/repos/linz/action-git-version/releases/latest | jq -r .assets[0].browser_download_url)"
         else
           download_url="https://github.com/linz/action-git-version/releases/download/${{ inputs.tool-version }}/git-version"
         fi
         echo "Downloading git-version from $download_url"
-        sudo curl -L "$download_url" -o /usr/local/bin/git-version
+        sudo curl --retry 3 -L "$download_url" -o /usr/local/bin/git-version
         sudo chmod +x /usr/local/bin/git-version
     - id: previous-version
       shell: bash
