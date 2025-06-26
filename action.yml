@@ -50,15 +50,21 @@ runs:
   using: "composite"
   steps:
     - shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TOOL_VERSION: ${{ inputs.tool-version }}
       run: |
         set -eo pipefail
-        if [ "${{ inputs.tool-version }}" = "latest" ]; then
-          download_url="$(curl -Ls https://api.github.com/repos/linz/action-git-version/releases/latest | jq -r .assets[0].browser_download_url)"
+        if [ "$TOOL_VERSION" = "latest" ]; then
+          download_url="$(gh release view --repo linz/action-git-version --json assets | jq -r .assets[0].url)"
         else
-          download_url="https://github.com/linz/action-git-version/releases/download/${{ inputs.tool-version }}/git-version"
+          download_url="https://github.com/linz/action-git-version/releases/download/$TOOL_VERSION/git-version"
         fi
-        sudo curl -Ls "$download_url" -o /usr/local/bin/git-version
+
+        echo "Downloading git-version from $download_url"
+        sudo curl --retry 3 -L "$download_url" -o /usr/local/bin/git-version
         sudo chmod +x /usr/local/bin/git-version
+
     - id: previous-version
       shell: bash
       run: |

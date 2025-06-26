@@ -21,3 +21,26 @@ jobs:
           git config --global user.email "test@test.com"
           git config --global user.name "test"
           make test
+
+  action-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.head_ref }} # checkout the correct branch name
+          fetch-depth: 0 # fetch the whole repo history
+
+      - id: version
+        uses: ./
+        with:
+          skip-prerelease: true
+          major-identifier: "BREAKING CHANGE:"
+          minor-identifier: "feat:"
+          prefix: "v"
+
+      - name: New version
+        run: |
+          echo ${{ steps.version.outputs.version }}
+      - name: Previous version
+        run: |
+          echo ${{ steps.version.outputs.previous-version }}
