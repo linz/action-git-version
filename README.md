@@ -225,7 +225,7 @@ You can configure the action with various inputs, a list of which has been provi
 | minor-identifier | The string used to identify a minor release (wrap with '/' to match using a regular expression)       | feature:      |
 | major-identifier | The string used to identify a major release (wrap with '/' to match using a regular expression)       | breaking:     |
 | prefix           | The prefix used for the version name                                                                  |               |
-| log-path         | The paths used to calculate changes (whitespace-separated)                                            |               |
+| log-paths         | The paths used to calculate changes (whitespace-separated)                                            |               |
 
 ## Requirements
 
